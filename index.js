@@ -7,6 +7,7 @@ const port = process.env.PORT || 5000;
 const {run} = require('./db/connect')
 const users_routes = require('./routes/usersRoute')
 const onAuthStateChanged = require('./routes/onAuthStateChanged')
+const menageHouseOwner = require('./routes/menageHouseOwnerRoute')
 
 
 //all middle ware
@@ -37,7 +38,10 @@ app.use(express.json());
 
 //routes middleware
 app.use("/api",users_routes)
+app.use("/api",menageHouseOwner)
+
 app.use("/api",verifyJWT,onAuthStateChanged)
+
 
 
 run()

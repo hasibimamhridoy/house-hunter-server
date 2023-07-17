@@ -46,8 +46,6 @@ const postAllUsers = async (req, res) => {
 }
 
 
-
-
 /**
  * LoginUser
  */
