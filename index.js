@@ -8,6 +8,7 @@ const {run} = require('./db/connect')
 const users_routes = require('./routes/usersRoute')
 const onAuthStateChanged = require('./routes/onAuthStateChanged')
 const menageHouseOwner = require('./routes/menageHouseOwnerRoute')
+const menageHouseRenter = require('./routes/menageHouseRenterRoute')
 
 
 //all middle ware
@@ -39,6 +40,7 @@ app.use(express.json());
 //routes middleware
 app.use("/api",users_routes)
 app.use("/api",menageHouseOwner)
+app.use("/api",menageHouseRenter)
 
 app.use("/api",verifyJWT,onAuthStateChanged)
 

@@ -14,7 +14,7 @@ const onAuthStateChanged = async (req, res) => {
     console.log(userEmail);
 
     const result = await usersCollection.findOne(userEmail)
-    res.status(200).send({ status: true, message: "User Logged In", data: {email: result.email , role : result.role} })
+    res.status(200).send({ status: true, message: "User Logged In", data: {email: result.email , role : result.role ,name : result.name} })
 
 }
 
