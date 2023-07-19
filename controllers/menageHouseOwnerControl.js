@@ -7,6 +7,7 @@ const { client } = require('../db/connect')
 require('dotenv').config()
 
 const houseCollection = client.db("houseHunter").collection("allHouse");
+const bookingsCollection = client.db("houseHunter").collection("bookings");
 
 
 const getAllHouse = async (req, res) => {
@@ -98,6 +99,19 @@ const getMyHouse = async (req, res) => {
 
 }
 
+
+const getMyBookingsHouse = async (req, res) => {
+
+    const email = req.query.email
+    console.log(email);
+    const query = { "userInfo.email" : email}
+    const result = await bookingsCollection.find(query).toArray()
+    res.status(200).send(result)
+
+}
+
+
+
 const getMySingleHouse = async (req, res) => {
 
     const id = req.params.id
@@ -136,4 +150,4 @@ const addHouse = async (req, res) => {
 
 }
 
-module.exports = { addHouse,getAllHouse,getMyHouse,deleteMyHouse,getMySingleHouse,updateMySingleHouse,getAllHouseCount }
+module.exports = { addHouse,getAllHouse,getMyHouse,deleteMyHouse,getMySingleHouse,updateMySingleHouse,getAllHouseCount,getMyBookingsHouse }
