@@ -11,6 +11,11 @@ const houseCollection = client.db("houseHunter").collection("allHouse");
 
 const getAllHouse = async (req, res) => {
 
+    const page = parseInt(req.query.page)
+    const limit = parseInt(req.query.limit)
+    console.log(page, limit);
+    const skip = (page * limit)
+
     const filters = req.query;
 
     // Construct the query based on the selected filters
@@ -38,24 +43,24 @@ const getAllHouse = async (req, res) => {
         console.log('Dhukse');
     }
     if (filters?.is_available) {
-        filterConditions.push({ availability_date : filters?.is_available });
-        console.log('Dhukse');
-    }
-    if (filters?.rent_per_month) {
-        filterConditions.push({ rent_per_month : filters?.rent_per_month });
+        filterConditions.push({ status : filters?.is_available });
         console.log('Dhukse');
     }
 
     // Add the age range filter condition
-    if (filters.rent_per_month) {
+    if (filters?.rent_per_month) {
         const rentRange = filters.rent_per_month.split(',');
         const minrent = parseInt(rentRange[0]);
         const maxrent = parseInt(rentRange[1]);
+
+        console.log(minrent,maxrent);
 
         // Use the age range in your filtering query
         filterConditions.push({
             rent_per_month: { $gte: minrent, $lte: maxrent }
         });
+
+        console.log(filterConditions);
     }
 
 
@@ -65,12 +70,21 @@ const getAllHouse = async (req, res) => {
     }
 
     try {
-        const result = await houseCollection.find(query).toArray();
+        const result = await houseCollection.find(query).skip(skip).limit(limit).toArray();
         res.send(result);
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
+
+}
+
+
+const getAllHouseCount = async (req, res) => {
+
+
+    const count = await houseCollection.countDocuments()
+    res.send({ count });
 
 }
 
@@ -122,4 +136,4 @@ const addHouse = async (req, res) => {
 
 }
 
-module.exports = { addHouse,getAllHouse,getMyHouse,deleteMyHouse,getMySingleHouse,updateMySingleHouse }
+module.exports = { addHouse,getAllHouse,getMyHouse,deleteMyHouse,getMySingleHouse,updateMySingleHouse,getAllHouseCount }

@@ -69,12 +69,8 @@ const loginUser = async (req, res) => {
                 userId : user._id
             },process.env.ACCESS_TOKEN)
 
+            res.status(200).send({ status: true, message: "Login Successfull",access_token : token, data: {email: user.email , role : user.role ,name : user.name} })
 
-            res.status(200).json({
-                "access_token" : token,
-                "userEmail" : user.email,
-                "message" : "Login Successfull"
-            })
 
         } 
         

@@ -1,4 +1,5 @@
 
+const { ObjectId } = require('mongodb');
 const { client } = require('../db/connect')
 require('dotenv').config()
 const stripe = require('stripe')(process.env.PAYMENT_SECRET_KEY)
@@ -19,6 +20,16 @@ const postBookings = async (req, res) => {
 const getBookings = async (req, res) => {
 
     const result = await bookingsCollection.find().toArray()
+    console.log(result)
+    res.send(result)
+
+}
+
+const myGetBookings = async (req, res) => {
+
+    const email = req.params.email
+    const query = {"bookingRenterInfo.email" : email}
+    const result = await bookingsCollection.find(query).toArray()
     console.log(result)
     res.send(result)
 
@@ -61,5 +72,11 @@ const createPaymentIntent = async (req, res)=>{
       clientSecret: paymentIntent.client_secret,
     })
 }
+const cencelHouse = async (req, res)=>{
+    const id= req.params.id
+    const query = {_id : new ObjectId(id)}
+    const result = await bookingsCollection.deleteOne(query)
+    res.send(result)
+}
 
-module.exports = { postBookings,createPaymentIntent,getBookings,isAlreadyBooked }
+module.exports = { postBookings,createPaymentIntent,getBookings,isAlreadyBooked,myGetBookings,cencelHouse }
